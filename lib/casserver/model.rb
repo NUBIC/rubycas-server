@@ -32,9 +32,11 @@ module CASServer::Model
   end
 
   class Base < ActiveRecord::Base
+    self.abstract_class = true
   end
 
   class Ticket < Base
+    self.abstract_class = true
     def to_s
       ticket
     end
@@ -50,15 +52,23 @@ module CASServer::Model
         destroy_all(conditions)
       end
     end
+
+    def self.my_table_name table_name
+      if self.respond_to? :table_name= 
+        self.table_name = table_name
+      else
+        set_table_name table_name
+      end
+    end
   end
 
   class LoginTicket < Ticket
-    set_table_name 'casserver_lt'
+    my_table_name 'casserver_lt'
     include Consumable
   end
 
   class ServiceTicket < Ticket
-    set_table_name 'casserver_st'
+    my_table_name 'casserver_st'
     include Consumable
 
     belongs_to :granted_by_tgt,
@@ -80,7 +90,7 @@ module CASServer::Model
   end
 
   class TicketGrantingTicket < Ticket
-    set_table_name 'casserver_tgt'
+    my_table_name 'casserver_tgt'
 
     serialize :extra_attributes
 
@@ -90,7 +100,7 @@ module CASServer::Model
   end
 
   class ProxyGrantingTicket < Ticket
-    set_table_name 'casserver_pgt'
+    my_table_name 'casserver_pgt'
     belongs_to :service_ticket
     has_many :granted_proxy_tickets,
       :class_name => 'CASServer::Model::ProxyTicket',

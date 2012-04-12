@@ -67,7 +67,11 @@ class CASServer::Authenticators::SQL < CASServer::Authenticators::Base
 
     @user_model = const_get(user_model_name)
     @user_model.establish_connection(options[:database])
-    @user_model.set_table_name(options[:user_table] || 'users')
+    if @user_model.respond_to? :table_name=
+      @user_model.table_name = (options[:user_table] || 'users')
+    else
+      @user_model.set_table_name(options[:user_table] || 'users')
+    end
     @user_model.inheritance_column = 'no_inheritance_column' if options[:ignore_type_column]
   end
 
@@ -84,7 +88,6 @@ class CASServer::Authenticators::SQL < CASServer::Authenticators::Base
     username_column = @options[:username_column] || 'username'
     password_column = @options[:password_column] || 'password'
     
-    $LOG.debug "#{self.class}: [#{user_model}] " + "Connection pool size: #{user_model.connection_pool.instance_variable_get(:@checked_out).length}/#{user_model.connection_pool.instance_variable_get(:@connections).length}"
     results = user_model.find(:all, :conditions => ["#{username_column} = ? AND #{password_column} = ?", @username, @password])
     user_model.connection_pool.checkin(user_model.connection)
        
