@@ -34,8 +34,8 @@ to build the LOCALE_LC files.
 
 "
 
-  s.add_dependency("activerecord", ">= 2.3.12", "< 3.1")
-  s.add_dependency("activesupport", ">= 2.3.12", "< 3.1")
+  s.add_dependency("activerecord", ">= 2.3.12")
+  s.add_dependency("activesupport", ">= 2.3.12")
   s.add_dependency("sinatra", "~> 1.0")
   s.add_dependency("gettext", "~> 2.1.0")
   s.add_dependency("crypt-isaac", "~> 0.9.1")
@@ -49,7 +49,7 @@ to build the LOCALE_LC files.
 
   # for authenticator specs
   s.add_development_dependency("net-ldap", "~> 0.1.1")
-  s.add_development_dependency("activeresource", ">= 2.3.12", "< 3.1")
+  s.add_development_dependency("activeresource", ">= 2.3.12")
 
   s.rdoc_options = [
     '--quiet', '--title', 'RubyCAS-Server Documentation', '--opname',
